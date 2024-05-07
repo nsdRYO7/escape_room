@@ -44,11 +44,19 @@ class _EscapeGameScreenState extends State<EscapeGameScreen> {
       'assets/sorrow_room.jpg',
       'assets/anger_room.jpg',
       'assets/fun_room.jpg',
+      'assets/special_room.jpg', // 特殊部屋の画像
     ];
+
+    // 特殊部屋にいる場合は、特別なアクションを実行
+    if (roomIndex == 4) {
+      print('特殊部屋に入った！');
+      // 特殊なアクションを実行する処理
+      // ...
+    }
 
     return GestureDetector(
       onTap: () {
-        // ここでは何も処理を行わない
+        // 特殊部屋にいる場合は、何も処理しない
       },
       child: Container(
         decoration: BoxDecoration(
@@ -84,14 +92,17 @@ class _EscapeGameScreenState extends State<EscapeGameScreen> {
     return Positioned(
       top: MediaQuery.of(context).size.height / 2 - 20,
       right: 10,
-      child: GestureDetector(
-        onTap: () {
-          int nextRoom = (currentRoom + 1) % 4; // 部屋の数
-          setState(() {
-            currentRoom = nextRoom;
-          });
-        },
-        child: Icon(Icons.arrow_forward, color: Colors.red),
+      child: Visibility(
+        visible: currentRoom != 4, // 特殊部屋ではない場合は表示
+        child: GestureDetector(
+          onTap: () {
+            int nextRoom = (currentRoom + 1) % 4; // 部屋の数
+            setState(() {
+              currentRoom = nextRoom;
+            });
+          },
+          child: Icon(Icons.arrow_forward, color: Colors.red),
+        ),
       ),
     );
   }
@@ -100,16 +111,16 @@ class _EscapeGameScreenState extends State<EscapeGameScreen> {
     return GestureDetector(
       onTap: () {
         // 画像内の特定の部分をクリックしたときの処理
-        // 現在の部屋が変わるようにする例
+        // 特殊部屋へ移動
         setState(() {
-          currentRoom = (currentRoom + 1) % 4; // 部屋の数
+          currentRoom = 4; // 特殊部屋の番号
         });
       },
       child: Container(
         width: 100,
         height: 100,
         color: Colors.red.withOpacity(0.5),
-        margin: EdgeInsets.fromLTRB(50, 50, 0, 0), // 画像内のクリック領域
+        margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 4, 50, 0, 0), // 画像内のクリック領域
       ),
     );
   }
